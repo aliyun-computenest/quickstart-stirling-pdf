@@ -14,42 +14,6 @@
 | 数据库 | 内嵌 H2，无需外接数据库 |
 | 实测部署耗时 | 约 3 分钟 |
 
-## 部署架构
-
-```text
-浏览器
-  │ HTTP 8080
-  ▼
-安全组
-  ▼
-ECS
-  └─ Docker Compose：Stirling-PDF
-       ├─ /configs       → /opt/stirling-pdf/configs
-       ├─ /logs          → /opt/stirling-pdf/logs
-       ├─ /usr/share/tessdata → /opt/stirling-pdf/tessdata
-       ├─ /pipeline      → /opt/stirling-pdf/pipeline
-       └─ /customFiles   → /opt/stirling-pdf/customFiles
-```
-
-计算巢通过 ROS 创建 VPC、交换机、安全组和 ECS，并通过云助手启动应用。Stirling-PDF 使用内嵌 H2 数据库，不会额外创建 RDS。
-
-## 部署前准备
-
-### 账号与权限
-
-请使用已完成实名认证的阿里云账号，并确保账号可以创建以下资源：
-
-- 计算巢服务实例；
-- ROS 资源栈；
-- ECS 实例、系统盘与安全组；
-- VPC 和交换机。
-
-使用 RAM 用户部署时，应由管理员授予上述资源的创建、查询和删除权限。
-
-### 计费说明
-
-部署会创建一台 ECS、200 GiB ESSD 系统盘并使用公网带宽。费用以创建页实时询价和阿里云账单为准。测试场景建议选择按量付费，并在验证结束后及时删除服务实例。
-
 ## 部署步骤
 
 ### 1. 打开创建页面
