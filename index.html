@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="计算巢是阿里云开放给企业应用服务商的服务管理平台。服务商能够在计算巢上发布私有化部署服务，为其客户提供云上软件一键部署的能力；同时也支持全托管模式的服务，赋能服务商托管其客户资源。">
+  <title>Stirling-PDF 计算巢部署文档 - Aliyun 计算巢 x Stirling-PDF</title>
+
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="css/theme.css">
+  
+
+  
+
+  
+  
+
+  
+    <script src="search/main.js"></script>
+  
+
+  
+
+  <script src="js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="logo">
+          <img src="./img/logo-2x.png">
+        </div>
+        <div class="nav-list">
+          <ul>
+          
+              <li><a href="#stirling-pdf">Stirling-PDF 计算巢部署文档</a></li>
+              
+                  <li><a href="#_1">概述</a></li>
+                  
+              
+                  <li><a href="#_2">部署步骤</a></li>
+                  
+                      <li class="li-h3"><a href="#1">1. 打开创建页面</a></li>
+                  
+                      <li class="li-h3"><a href="#2">2. 配置部署参数</a></li>
+                  
+                      <li class="li-h3"><a href="#3">3. 等待部署完成</a></li>
+                  
+                      <li class="li-h3"><a href="#4">4. 登录并使用</a></li>
+                  
+              
+                  <li><a href="#_3">数据与安全</a></li>
+                  
+              
+                  <li><a href="#_4">资源释放</a></li>
+                  
+              
+                  <li><a href="#_5">官方链接</a></li>
+                  
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content theme-github">
+      
+      <div class="content-inner">        
+        
+        <h1 id="stirling-pdf">Stirling-PDF 计算巢部署文档</h1>
+<h2 id="_1">概述</h2>
+<p><a href="https://github.com/Stirling-Tools/Stirling-PDF">Stirling-PDF</a> 是开源的自托管 PDF 处理平台，提供合并、拆分、转换、压缩、OCR、签名、脱敏和 REST API 等工具。本方案使用官方 Full 镜像，通过 Docker Compose 部署在用户自己的 ECS 中，文件处理和应用数据不需要上传到第三方 PDF 网站。</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务 ID</td>
+<td><code>service-4afb3777de26498daa22</code></td>
+</tr>
+<tr>
+<td>部署形态</td>
+<td>单台 ECS + Docker Compose</td>
+</tr>
+<tr>
+<td>应用镜像</td>
+<td><code>stirlingtools/stirling-pdf:latest</code></td>
+</tr>
+<tr>
+<td>访问端口</td>
+<td>8080（Web UI 与 REST API）</td>
+</tr>
+<tr>
+<td>数据存储</td>
+<td>ECS <code>/opt/stirling-pdf</code></td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>内嵌 H2，无需外接数据库</td>
+</tr>
+<tr>
+<td>实测部署耗时</td>
+<td>约 3 分钟</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">部署步骤</h2>
+<h3 id="1">1. 打开创建页面</h3>
+<p>访问 <a href="https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&amp;ServiceId=service-4afb3777de26498daa22">Stirling-PDF 服务实例创建页</a>。</p>
+<p><img alt="创建服务实例" src="images/create-instance.png" /></p>
+<h3 id="2">2. 配置部署参数</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务实例名称</td>
+<td>控制台中用于识别本次部署</td>
+<td>保持默认或自定义</td>
+</tr>
+<tr>
+<td>地域、可用区</td>
+<td>ECS 所在位置</td>
+<td>选择接近使用者且有库存的地域和可用区</td>
+</tr>
+<tr>
+<td>付费类型</td>
+<td>按量付费或包年包月</td>
+<td>测试使用按量付费</td>
+</tr>
+<tr>
+<td>实例类型</td>
+<td>ECS 规格</td>
+<td>2 vCPU / 8 GiB 起</td>
+</tr>
+<tr>
+<td>实例密码</td>
+<td>ECS 登录密码</td>
+<td>使用符合页面规则的强密码</td>
+</tr>
+<tr>
+<td>专有网络</td>
+<td>新建或复用 VPC</td>
+<td>首次部署可选择新建</td>
+</tr>
+<tr>
+<td>VPC/交换机网段</td>
+<td>网络地址范围</td>
+<td>无冲突时保持默认</td>
+</tr>
+<tr>
+<td>管理员用户名</td>
+<td>Stirling-PDF 登录用户名</td>
+<td>默认 <code>admin</code>，也可自定义</td>
+</tr>
+<tr>
+<td>管理员密码</td>
+<td>Stirling-PDF 首个管理员密码</td>
+<td>使用独立强密码</td>
+</tr>
+</tbody>
+</table>
+<p>管理员凭据只在应用首次初始化、用户表为空时生效。请勿使用上游默认密码，也不要将密码写入文档或代码仓库。</p>
+<p>填写完成并看到询价结果后，点击“下一步：确认订单”，核对资源和费用，勾选服务协议并创建实例。</p>
+<h3 id="3">3. 等待部署完成</h3>
+<p>进入服务实例详情页，等待状态变为“已部署”。本次实测从创建到部署完成约 3 分钟。</p>
+<p><img alt="服务实例详情" src="images/instance-detail.png" /></p>
+<p>“立即使用”区域会显示：</p>
+<ul>
+<li><code>stirling-pdf_8080_url</code>：应用访问地址；</li>
+<li><code>QuickStartGuide</code>：登录与使用说明；</li>
+<li><code>ApiDocsPath</code>：REST API 文档与 API Key 使用说明；</li>
+<li><code>OcrLanguageTip</code>：OCR 语言包说明。</li>
+</ul>
+<h3 id="4">4. 登录并使用</h3>
+<p>打开 <code>stirling-pdf_8080_url</code>，未认证访问会跳转到 <code>/login</code>。使用部署时填写的管理员用户名和密码登录，即可从工具面板选择 PDF 工具。</p>
+<p>发布前实测已完成以下验证：</p>
+<ol>
+<li>上传一份单页 PDF；</li>
+<li>选择“压缩”工具并执行；</li>
+<li>结果页正常显示输出文件；</li>
+<li>下载结果为有效 PDF 文件。</li>
+</ol>
+<p><img alt="Stirling-PDF 压缩结果" src="images/service-page.png" /></p>
+<p>REST API 文档位于 <code>/swagger-ui.html</code>。API Key 需登录后在账号设置中生成，并通过 <code>X-API-KEY</code> 请求头传递。</p>
+<h2 id="_3">数据与安全</h2>
+<ul>
+<li>配置和 H2 数据库保存在 <code>/opt/stirling-pdf/configs</code>，日志、OCR 语言包、工作流和自定义文件也持久化在 <code>/opt/stirling-pdf</code> 下。</li>
+<li>文档在用户自己的 ECS 中处理；删除 ECS 或服务实例前请先备份需要保留的数据。</li>
+<li>应用启用了登录认证，但默认访问链路为公网 HTTP 8080。生产环境建议限制安全组来源，并配置 HTTPS 反向代理。</li>
+<li>镜像内置英文 OCR 语言包，并预置简体中文 <code>chi_sim</code>。其他语言可将对应 <code>traineddata</code> 文件放入 <code>/opt/stirling-pdf/tessdata</code> 后重启容器。</li>
+<li>SSO/OAuth2 需要 HTTPS，请在 ECS 前配置 Nginx、Traefik 或 Caddy 做 TLS 终止。</li>
+</ul>
+<h2 id="_4">资源释放</h2>
+<p>不再使用时，在计算巢服务实例详情页执行“删除”。删除完成后建议继续确认：</p>
+<ol>
+<li>服务实例已不存在；</li>
+<li>ROS 资源栈状态为 <code>DELETE_COMPLETE</code>；</li>
+<li>ECS、VPC、交换机和安全组均无残留；</li>
+<li>账单中不再产生相关按量资源费用。</li>
+</ol>
+<p>删除服务实例会同时删除 ECS 及其本地数据，请提前导出或备份重要文件和配置。</p>
+<h2 id="_5">官方链接</h2>
+<ul>
+<li><a href="https://github.com/Stirling-Tools/Stirling-PDF">Stirling-PDF 官方仓库</a></li>
+<li><a href="https://docs.stirlingpdf.com/">Stirling-PDF 官方文档</a></li>
+<li><a href="https://docs.stirlingpdf.com/Installation/Docker/">Stirling-PDF Docker 安装文档</a></li>
+<li><a href="https://help.aliyun.com/zh/compute-nest/">阿里云计算巢文档</a></li>
+</ul>
+        
+      </div>
+
+      <div class="copyrights">© 2009-2022 Aliyun.com 版权所有</div>
+    </div>
+  </div>
+  
+  <!--
+  MkDocs version      : 1.6.1
+  Docs Build Date UTC : 2026-10-13 02:58:31.943189+00:00
+  -->
+</body>
+</html>
